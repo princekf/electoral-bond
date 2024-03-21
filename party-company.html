@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Party and Company</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Party and Company Information</h1>
+    <p>Party: <span id="partyName"></span></p>
+    <p>Company: <span id="companyName"></span></p>
+</header>
+    <div style="background-color: #f8d7da; color: #721c24; padding: 10px; margin-bottom: 20px;">
+        <strong>Disclaimer:</strong> This site is created for educational purposes for data engineering students. 
+        For accurate data, please refer to the information shared by the Election Commission of India.
+    </div>
+<table id="bondsTable">
+    <thead>
+        <tr>
+            <th>Sr No</th>
+            <!-- <th>Reference No (URN)</th> -->
+            <th>Journal Date</th>
+            <th>Date of Purchase</th>
+            <th>Date of Expiry</th>
+            <th>Company</th>
+            <th>Bond Number</th>
+            <th>Denominations</th>
+            <th>Issue Branch Code</th>
+            <th>Issue Teller</th>
+            <th>Party</th>
+            <th>Status</th>
+            <th>Sr No (Redemption)</th>
+            <th>Date of Encashment</th>
+            <th>Account No of Political Party</th>
+            <th>Prefix (Redemption)</th>
+            <th>Denominations (Redemption)</th>
+            <th>Pay Branch Code</th>
+            <th>Pay Teller</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Data will be dynamically inserted here -->
+    </tbody>
+</table>
+
+<script src="bonds-purchased-redemption-array.js"></script>
+
+<script>
+
+
+    function formatToCrore(number) {
+        return (number / 10000000).toFixed(2) + ' Crore';
+    }
+
+    // Parse URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const party = urlParams.get('party');
+    const company = urlParams.get('company');
+
+    // Display party and company names
+    document.getElementById('partyName').textContent = party;
+    document.getElementById('companyName').textContent = company;
+    const tableBody = document.querySelector('#bondsTable tbody');
+    const allDataF = allData.filter((data) => data.NameOfThePurchaser === company && data.NameOfThePoliticalParty === party);
+    allDataF.forEach((data, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${data.SrNoP}</td>
+            <td>${data.JournalDate}</td>
+            <td>${data.DateOfPurchase}</td>
+            <td>${data.DateOfExpiry}</td>
+            <td>${data.NameOfThePurchaser}</td>
+            <td>${data.BondNumber}</td>
+            <td>${formatToCrore(data.DenominationsP)}</td>
+            <td>${data.IssueBranchCode}</td>
+            <td>${data.IssueTeller}</td>
+            <td>${data.NameOfThePoliticalParty}</td>
+            <td>${data.Status}</td>
+            <td>${data.SrNoR}</td>
+            <td>${data.DateOfEncashment}</td>
+            <td>${data.AccountNoOfPoliticalParty}</td>
+            <td>${data.PrefixR}</td>
+            <td>${formatToCrore(data.DenominationsR)}</td>
+            <td>${data.PayBranchCode}</td>
+            <td>${data.PayTeller}</td>
+        `;
+        tableBody.appendChild(row);
+
+        // Alternate row colors
+        if (index % 2 === 0) {
+            row.classList.add('even');
+        }
+    });
+</script>
+
+</body>
+</html>
